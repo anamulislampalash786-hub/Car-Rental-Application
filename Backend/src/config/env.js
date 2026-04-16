@@ -1,0 +1,12 @@
+import dotenv from "dotenv";
+dotenv.config();
+
+
+const config = {
+    PORT: process.env.PORT,
+    MONGO_URI: process.env.MONGO_URI,
+    IMAGEKIT_PRIVATE_KEY: process.env.IMAGEKIT_PRIVATE_KEY,
+};
+
+
+export default config;
