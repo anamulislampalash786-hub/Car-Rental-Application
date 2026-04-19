@@ -21,7 +21,7 @@ const carSchema = new mongoose.Schema({
     kilometers:   { type: Number, required: true },
     status: {
         type: String,
-        enum: ['available', 'rented', 'returned', 'removed'],
+        enum: ['pending', 'available', 'rented', 'returned', 'removed'],
         default: 'available',
     },
     images: [{

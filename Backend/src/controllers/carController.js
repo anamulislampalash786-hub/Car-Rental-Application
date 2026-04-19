@@ -8,6 +8,7 @@ const uploadCarImages = (files) => Promise.all(files.map(uploadFile));
 
 export const createCar = async (req, res) => {
     try {
+        const isBossOrAdmin = ['boss', 'admin'].includes(req.user.role);
         const carData = {
             location:     req.body.location,
             addedBy:      req.user._id,
@@ -19,7 +20,7 @@ export const createCar = async (req, res) => {
             seats:        Number(req.body.seats),
             pricePerDay:  Number(req.body.pricePerDay),
             kilometers:   Number(req.body.kilometers),
-            ...(req.body.status && { status: req.body.status }),
+            status:       isBossOrAdmin ? req.body.status || 'available' : 'pending',
         };
 
         if (req.files?.length > 0) {
@@ -113,8 +114,11 @@ export const getAllCars = async (req, res) => {
         query = query.select('-__v');
 
         const page  = parseInt(req.query.page,  10) || 1;
-        const limit = parseInt(req.query.limit, 10) || 20;
-        query = query.skip((page - 1) * limit).limit(limit);
+        const limit = parseInt(req.query.limit, 10);
+
+        if (limit > 0) {
+            query = query.skip((page - 1) * limit).limit(limit);
+        }
 
         const cars = await query;
         res.status(200).json({
@@ -140,11 +144,11 @@ export const getCar = async (req, res) => {
             return res.status(404).json({ status: 'fail', message: 'Car not found' });
         }
 
-        // public cannot see removed cars
+        // public can only see available cars
         const requesterLevel = ROLE_HIERARCHY.indexOf(req.user?.role ?? 'user');
         const isStaff        = requesterLevel >= ROLE_HIERARCHY.indexOf('manager');
 
-        if (!isStaff && car.status === 'removed') {
+        if (!isStaff && car.status !== 'available') {
             return res.status(404).json({ status: 'fail', message: 'Car not found' });
         }
 
@@ -163,12 +167,17 @@ export const updateCar = async (req, res) => {
             return res.status(404).json({ status: 'fail', message: 'Car not found' });
         }
 
-        const strings = ['manufacturer', 'model', 'color', 'transmission', 'status', 'location'];
+        const isBossOrAdmin = ['boss', 'admin'].includes(req.user.role);
+        const strings = ['manufacturer', 'model', 'color', 'transmission', 'location'];
         const numbers = ['year', 'seats', 'pricePerDay', 'kilometers'];
         const carData = {};
 
         strings.forEach((f) => { if (req.body[f] !== undefined) carData[f] = req.body[f]; });
         numbers.forEach((f) => { if (req.body[f] !== undefined) carData[f] = Number(req.body[f]); });
+
+        if (isBossOrAdmin && req.body.status !== undefined) {
+            carData.status = req.body.status;
+        }
 
         if (req.body.removeImages) {
             const toRemove = JSON.parse(req.body.removeImages);

@@ -27,6 +27,7 @@ const locationSchema = z.object({
     address: z.string().min(1, 'Required'),
     phone:   z.string().optional(),
     email:   z.string().email('Invalid email').optional().or(z.literal('')),
+    isActive: z.boolean().optional(),
 });
 
 // ─── Location Form Dialog ─────────────────────────────────────────────────────
@@ -42,13 +43,14 @@ function LocationFormDialog({ location, trigger }) {
     const { register, handleSubmit, reset, formState: { errors } } = useForm({
         resolver: zodResolver(locationSchema),
         defaultValues: location ? {
-            name:    location.name,
-            city:    location.city,
-            country: location.country,
-            address: location.address,
-            phone:   location.phone || '',
-            email:   location.email || '',
-        } : { country: 'Finland' },
+            name:     location.name,
+            city:     location.city,
+            country:  location.country,
+            address:  location.address,
+            phone:    location.phone || '',
+            email:    location.email || '',
+            isActive: location.isActive,
+        } : { country: 'Finland', isActive: true },
     });
 
     const onSubmit = (data) => {
@@ -101,6 +103,17 @@ function LocationFormDialog({ location, trigger }) {
                             <Input placeholder="branch@nordiccars.fi" {...register('email')} />
                             {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
                         </div>
+                        <div className="col-span-2 flex items-center gap-2">
+                            <input
+                                id="isActive"
+                                type="checkbox"
+                                className="h-4 w-4 rounded border-input text-primary focus:ring-primary"
+                                {...register('isActive')}
+                            />
+                            <label htmlFor="isActive" className="text-sm text-muted-foreground">
+                                Keep location active
+                            </label>
+                        </div>
                     </div>
                     <Button type="submit" className="w-full" disabled={isPending}>
                         {isPending
@@ -117,13 +130,21 @@ function LocationFormDialog({ location, trigger }) {
 // ─── Location Card ────────────────────────────────────────────────────────────
 
 function LocationCard({ location }) {
-    const { mutate: deactivate, isPending } = useDeactivateLocation();
+    const { mutate: update, isPending: updating } = useUpdateLocation(location._id);
+    const { mutate: deactivate, isPending: deactivating } = useDeactivateLocation();
 
-    const handleToggle = () => {
+    const handleDeactivate = () => {
         if (!location.isActive) return;
         if (!confirm(`Deactivate ${location.name}?`)) return;
         deactivate(location._id, {
             onSuccess: () => toast.success('Location deactivated'),
+            onError:   (err) => toast.error(err.response?.data?.message || 'Failed'),
+        });
+    };
+
+    const handleActivate = () => {
+        update({ isActive: true }, {
+            onSuccess: () => toast.success('Location activated'),
             onError:   (err) => toast.error(err.response?.data?.message || 'Failed'),
         });
     };
@@ -171,17 +192,29 @@ function LocationCard({ location }) {
                             </Button>
                         }
                     />
-                    {location.isActive && (
+                    {location.isActive ? (
                         <Button
                             variant="outline"
                             size="sm"
-                            onClick={handleToggle}
-                            disabled={isPending}
+                            onClick={handleDeactivate}
+                            disabled={deactivating}
                             className="text-destructive border-red-200 hover:bg-red-50"
                         >
-                            {isPending
+                            {deactivating
                                 ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
                                 : <><ToggleLeft className="h-3.5 w-3.5 mr-1.5" />Deactivate</>
+                            }
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="default"
+                            size="sm"
+                            onClick={handleActivate}
+                            disabled={updating}
+                        >
+                            {updating
+                                ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                : <><ToggleLeft className="h-3.5 w-3.5 mr-1.5" />Activate</>
                             }
                         </Button>
                     )}

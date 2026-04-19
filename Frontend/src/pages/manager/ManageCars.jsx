@@ -21,6 +21,7 @@ import {
 } from '@/hooks/useCars';
 import { useAllLocations } from '@/hooks/useLocations';
 import { toast }           from 'sonner';
+import useAuthStore         from '@/store/authStore';
 import { useForm }         from 'react-hook-form';
 import { zodResolver }     from '@hookform/resolvers/zod';
 import { z }               from 'zod';
@@ -41,13 +42,14 @@ const carSchema = z.object({
 
 // ─── Status config ────────────────────────────────────────────────────────────
 
-const STATUS_FILTERS = ['all', 'available', 'rented', 'returned', 'removed'];
+const STATUS_FILTERS = ['all', 'pending', 'available', 'rented', 'returned', 'removed'];
 
 const statusConfig = {
-    available: { color: 'text-green-600 bg-green-50',   label: 'Available' },
-    rented:    { color: 'text-blue-600 bg-blue-50',     label: 'Rented'    },
+    pending:   { color: 'text-yellow-600 bg-yellow-50', label: 'Pending'   },
+    available: { color: 'text-green-600 bg-green-50',  label: 'Available' },
+    rented:    { color: 'text-blue-600 bg-blue-50',    label: 'Rented'    },
     returned:  { color: 'text-yellow-600 bg-yellow-50', label: 'Returned'  },
-    removed:   { color: 'text-gray-500 bg-gray-100',    label: 'Removed'   },
+    removed:   { color: 'text-gray-500 bg-gray-100',   label: 'Removed'   },
 };
 
 // ─── Car Form Dialog ──────────────────────────────────────────────────────────
@@ -252,6 +254,7 @@ function CarFormDialog({ car, trigger }) {
 // ─── Car Item ─────────────────────────────────────────────────────────────────
 
 function CarItem({ car }) {
+    const isBoss = useAuthStore((state) => state.isBoss());
     const { mutate: deleteCar, isPending: deleting } = useDeleteCar();
     const { mutate: updateCar, isPending: updating } = useUpdateCar(car._id);
 
@@ -345,6 +348,38 @@ function CarItem({ car }) {
                                 {updating
                                     ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
                                     : '✓ Mark Available'
+                                }
+                            </Button>
+                        )}
+
+                        {/* Approve — boss only, pending cars */}
+                        {car.status === 'pending' && isBoss && (
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={handleMarkAvailable}
+                                disabled={updating}
+                                className="text-green-600 border-green-200 hover:bg-green-50 h-8 text-xs"
+                            >
+                                {updating
+                                    ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                    : 'Approve'
+                                }
+                            </Button>
+                        )}
+
+                        {/* Add again — removed cars only */}
+                        {car.status === 'removed' && (
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={handleMarkAvailable}
+                                disabled={updating}
+                                className="text-green-600 border-green-200 hover:bg-green-50 h-8 text-xs"
+                            >
+                                {updating
+                                    ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                    : 'Add again'
                                 }
                             </Button>
                         )}

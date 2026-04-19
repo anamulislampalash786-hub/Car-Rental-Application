@@ -135,6 +135,7 @@ export default function Cars() {
         ...(filters.location     && { location:     filters.location }),
         ...(filters.seats        && { seats:        filters.seats }),
         sort: filters.sort,
+        limit: 0, // fetch all available cars so the count is accurate
     };
 
     const { data: cars, isLoading } = useAllCars(params);
@@ -173,7 +174,7 @@ export default function Cars() {
                 <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
-                        placeholder="Search by make, model or color..."
+                        placeholder="Search by manufacturer, model or color..."
                         className="pl-9"
                         value={filters.search}
                         onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))}
