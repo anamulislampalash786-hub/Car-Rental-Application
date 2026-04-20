@@ -40,56 +40,64 @@ function QuickActions() {
             icon:        Users,
             label:       'All Users',
             description: 'View and manage all users',
-            color:       'bg-blue-500/10 text-blue-600',
+            bg:          'bg-sky-50 border-sky-100',
+            iconBg:      'bg-sky-500/10 text-sky-700 ring-1 ring-sky-100',
         },
         {
             to:          '/admin/company',
             icon:        Building2,
             label:       'Company Info',
             description: 'Update company details',
-            color:       'bg-purple-500/10 text-purple-600',
+            bg:          'bg-violet-50 border-violet-100',
+            iconBg:      'bg-violet-500/10 text-violet-700 ring-1 ring-violet-100',
         },
         {
             to:          '/boss/team',
             icon:        ShieldCheck,
             label:       'Team',
             description: 'Manage managers and bosses',
-            color:       'bg-green-500/10 text-green-600',
+            bg:          'bg-emerald-50 border-emerald-100',
+            iconBg:      'bg-emerald-500/10 text-emerald-700 ring-1 ring-emerald-100',
         },
         {
             to:          '/boss/locations',
             icon:        MapPin,
             label:       'Locations',
             description: 'Manage branch locations',
-            color:       'bg-orange-500/10 text-orange-600',
+            bg:          'bg-orange-50 border-orange-100',
+            iconBg:      'bg-orange-500/10 text-orange-700 ring-1 ring-orange-100',
         },
         {
             to:          '/manager/cars',
             icon:        Car,
             label:       'Fleet',
             description: 'Manage all cars',
-            color:       'bg-indigo-500/10 text-indigo-600',
+            bg:          'bg-indigo-50 border-indigo-100',
+            iconBg:      'bg-indigo-500/10 text-indigo-700 ring-1 ring-indigo-100',
         },
         {
             to:          '/manager/rentals',
             icon:        CalendarRange,
             label:       'Rentals',
             description: 'View all rentals',
-            color:       'bg-pink-500/10 text-pink-600',
+            bg:          'bg-rose-50 border-rose-100',
+            iconBg:      'bg-rose-500/10 text-rose-700 ring-1 ring-rose-100',
         },
         {
             to:          '/boss/stats',
             icon:        TrendingUp,
             label:       'Revenue',
             description: 'Revenue statistics',
-            color:       'bg-yellow-500/10 text-yellow-600',
+            bg:          'bg-amber-50 border-amber-100',
+            iconBg:      'bg-amber-500/10 text-amber-700 ring-1 ring-amber-100',
         },
         {
             to:          '/manager/stats',
             icon:        DollarSign,
             label:       'Stats',
             description: 'Operational statistics',
-            color:       'bg-teal-500/10 text-teal-600',
+            bg:          'bg-teal-50 border-teal-100',
+            iconBg:      'bg-teal-500/10 text-teal-700 ring-1 ring-teal-100',
         },
     ];
 
@@ -99,9 +107,9 @@ function QuickActions() {
                 <Link
                     key={a.to}
                     to={a.to}
-                    className="p-4 rounded-xl border bg-card hover:bg-muted/30 hover:shadow-sm transition-all group"
+                    className={`p-4 rounded-3xl border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl ${a.bg}`}
                 >
-                    <div className={`h-9 w-9 rounded-full flex items-center justify-center mb-3 ${a.color}`}>
+                    <div className={`h-9 w-9 rounded-full flex items-center justify-center mb-3 ${a.iconBg}`}>
                         <a.icon className="h-4 w-4" />
                     </div>
                     <p className="font-medium text-sm">{a.label}</p>

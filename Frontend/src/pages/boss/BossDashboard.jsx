@@ -40,24 +40,32 @@ function QuickActions() {
             icon:        BarChart2,
             label:       'Revenue Stats',
             description: 'View detailed revenue breakdown',
+            bg:          'bg-amber-50 border-amber-100',
+            iconBg:      'bg-amber-500/10 text-amber-700 ring-1 ring-amber-100',
         },
         {
             to:          '/boss/team',
             icon:        Users,
             label:       'Manage Team',
             description: 'Add or remove managers',
+            bg:          'bg-violet-50 border-violet-100',
+            iconBg:      'bg-violet-500/10 text-violet-700 ring-1 ring-violet-100',
         },
         {
             to:          '/boss/locations',
             icon:        MapPin,
             label:       'Locations',
             description: 'Manage branch locations',
+            bg:          'bg-sky-50 border-sky-100',
+            iconBg:      'bg-sky-500/10 text-sky-700 ring-1 ring-sky-100',
         },
         {
             to:          '/manager/cars',
             icon:        Car,
             label:       'Fleet',
             description: 'View and manage all cars',
+            bg:          'bg-cyan-50 border-cyan-100',
+            iconBg:      'bg-cyan-500/10 text-cyan-700 ring-1 ring-cyan-100',
         },
     ];
 
@@ -67,10 +75,10 @@ function QuickActions() {
                 <Link
                     key={a.to}
                     to={a.to}
-                    className="p-4 rounded-xl border bg-card hover:bg-muted/30 hover:shadow-sm transition-all group"
+                    className={`p-4 rounded-3xl border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl ${a.bg}`}
                 >
-                    <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">
-                        <a.icon className="h-4 w-4 text-primary" />
+                    <div className={`h-9 w-9 rounded-full flex items-center justify-center mb-3 ${a.iconBg}`}>
+                        <a.icon className="h-4 w-4" />
                     </div>
                     <p className="font-medium text-sm">{a.label}</p>
                     <p className="text-xs text-muted-foreground mt-0.5">{a.description}</p>

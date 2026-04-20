@@ -43,24 +43,32 @@ function QuickActions() {
             icon:        CalendarRange,
             label:       'Manage Rentals',
             description: 'Approve, activate and process returns',
+            bg:          'bg-orange-50 border-orange-100',
+            iconBg:      'bg-orange-500/10 text-orange-700 ring-1 ring-orange-100',
         },
         {
             to:          '/manager/cars',
             icon:        Car,
             label:       'Manage Cars',
             description: 'Add, edit or remove cars',
+            bg:          'bg-indigo-50 border-indigo-100',
+            iconBg:      'bg-indigo-500/10 text-indigo-700 ring-1 ring-indigo-100',
         },
         {
             to:          '/manager/users',
             icon:        Users,
             label:       'Manage Users',
             description: 'View and lock user accounts',
+            bg:          'bg-cyan-50 border-cyan-100',
+            iconBg:      'bg-cyan-500/10 text-cyan-700 ring-1 ring-cyan-100',
         },
         {
             to:          '/manager/stats',
             icon:        BarChart2,
             label:       'Statistics',
             description: 'View rentals and revenue stats',
+            bg:          'bg-emerald-50 border-emerald-100',
+            iconBg:      'bg-emerald-500/10 text-emerald-700 ring-1 ring-emerald-100',
         },
     ];
 
@@ -70,10 +78,10 @@ function QuickActions() {
                 <Link
                     key={action.to}
                     to={action.to}
-                    className="p-4 rounded-xl border bg-card hover:bg-muted/30 hover:shadow-sm transition-all group"
+                    className={`p-4 rounded-3xl border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl ${action.bg}`}
                 >
-                    <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">
-                        <action.icon className="h-4 w-4 text-primary" />
+                    <div className={`h-9 w-9 rounded-full flex items-center justify-center mb-3 ${action.iconBg}`}>
+                        <action.icon className="h-4 w-4" />
                     </div>
                     <p className="font-medium text-sm">{action.label}</p>
                     <p className="text-xs text-muted-foreground mt-0.5">{action.description}</p>

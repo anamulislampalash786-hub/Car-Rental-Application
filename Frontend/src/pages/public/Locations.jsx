@@ -14,18 +14,20 @@ import { useCarsAtLocation }    from '@/hooks/useLocations';
 function LocationCard({ location }) {
     const { data, isLoading } = useCarsAtLocation(location._id);
     const availableCars       = data?.cars?.length ?? 0;
+    const statusColor         = location.isActive ? 'from-emerald-400 to-sky-400' : 'from-slate-400 to-slate-600';
 
     return (
-        <Card className="hover:shadow-md transition-shadow">
-            <CardHeader className="pb-3">
+        <Card className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-2xl hover:bg-white">
+            <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${statusColor}`} />
+            <CardHeader className="relative pb-3 pt-4">
                 <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                            <MapPin className="h-5 w-5 text-primary" />
+                        <div className="h-10 w-10 rounded-full bg-sky-100/90 flex items-center justify-center shrink-0 shadow-sm ring-1 ring-sky-200 transition-colors duration-200 group-hover:bg-sky-200">
+                            <MapPin className="h-5 w-5 text-sky-700" />
                         </div>
                         <div>
-                            <CardTitle className="text-base">{location.name}</CardTitle>
-                            <p className="text-sm text-muted-foreground">
+                            <CardTitle className="text-base text-slate-900">{location.name}</CardTitle>
+                            <p className="text-sm text-slate-500">
                                 {location.city}, {location.country}
                             </p>
                         </div>
