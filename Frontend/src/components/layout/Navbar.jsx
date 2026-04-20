@@ -176,18 +176,19 @@ export default function Navbar() {
                     {user ? (
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Avatar className="cursor-pointer h-9 w-9">
-                                    <AvatarFallback className="bg-accent text-accent-foreground text-sm">
-                                        {initials}
-                                    </AvatarFallback>
-                                </Avatar>
+                                <div className="flex items-center gap-2 cursor-pointer">
+                                    <Avatar className="h-9 w-9">
+                                        <AvatarFallback className="bg-accent text-accent-foreground text-sm">
+                                            {initials}
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    <div className="hidden md:block">
+                                        <p className="text-sm font-medium">{user.name}</p>
+                                        <p className="text-xs text-muted-foreground capitalize">{user.role}</p>
+                                    </div>
+                                </div>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-48">
-                                <div className="px-2 py-1.5">
-                                    <p className="text-sm font-medium">{user.name}</p>
-                                    <p className="text-xs text-muted-foreground capitalize">{user.role}</p>
-                                </div>
-                                <DropdownMenuSeparator />
                                 <DropdownMenuItem asChild>
                                     <Link to={dashboardPath} className="flex items-center gap-2">
                                         <LayoutDashboard className="h-4 w-4" />
