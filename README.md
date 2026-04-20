@@ -122,7 +122,7 @@ Car-Rental-Application/
 │   └── package.json
 ├── .gitignore               # Git ignore rules
 └── README.md               # Project documentation
-```
+
 
 ## Getting Started
 
