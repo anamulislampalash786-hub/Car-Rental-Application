@@ -255,11 +255,3 @@ VITE_IMAGEKIT_URL_ENDPOINT=your_imagekit_url_endpoint
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
-## License
-
-This project is licensed under the ISC License.
-
-## Support
-
-For support, please contact the development team or create an issue in the repository.
